@@ -1,0 +1,72 @@
+{% extends "admin.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <div class="col-xs-8">
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <svg id="scoregraph" height="300" data-json="{{ scoreboard }}"></svg>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">Last Announcement<span class="text-right pull-right">{{ latest_announcement.time }}</span></div>
+        <div class="panel-body">{{ latest_announcement.message }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">Latest Events</div>
+        <table class="table">
+          {% for event in latest_events %}
+            <tr>
+              <td>{{ event.time }}</td>
+              <td>{{ event.team.name }}</td>
+              <td>{{ event.message }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">Latest Scores</div>
+        <table class="table">
+          {% for event in latest_scores %}
+            <tr>
+              <td>{{ event.time }}</td>
+              <td>{{ event.team.name }}</td>
+              <td>{{ event.message }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-4 panels-status">
+    {% for track in tracks %}
+    <div class="panel {% if track.disabled %}panel-danger{% else %}panel-success{% endif %}">
+      <div class="panel-body">
+        <h3>{{ track.title }}</h3>
+        <div class="progress">
+          <div class="progress-bar progress-bar-success" style="width: {{ track.closed_percent }}%">
+            <span class="sr-only">{{ track.closed_percent }}% Complete (success)</span>
+          </div>
+          <div class="progress-bar progress-bar-danger" style="width: {{ track.open_percent }}%">
+            <span class="sr-only">{{ track.open_percent }}% Complete (warning)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <script>
+  setTimeout(function () {
+    document.location.reload();
+  }, 60000)
+  </script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{
+	"id": "track_lore",
+	"title": "The mole",
+	"initial_status": "locked",
+	"missions": [
+		{
+			"id": "the_butcher_01",
+			"title": "The Butcher 1",
+			"reward": 0,
+			"initial_status": "open",
+			"dependencies": [],
+			"kind": "trivia",
+			"posts": [
+				{
+					"id": "the_butcher_post_01",
+					"initial_status": "open",
+					"sender": "Red Leader",
+					"en": "the_butcher_01/post_01.md",
+					"fr": "the_butcher_01/post_01.md"
+				}
+			]
+		}, {
+			"id": "watch_dog_01",
+			"title": "Watch Dog 1",
+			"reward": 200,
+			"initial_status": "open",
+			"dependencies": [],
+			"kind": "logic",
+			"posts": [
+				{
+					"id": "watch_dog_post_01",
+					"initial_status": "open",
+					"sender": "Puppy Ears",
+					"en": "watch_dog_01/post_01.md",
+					"fr": "watch_dog_01/post_01.md"
+				}
+			]
+		}, {
+			"id": "watch_dog_02",
+			"title": "Watch Dog 2",
+			"reward": 200,
+			"initial_status": "locked",
+			"dependencies": ["the_butcher_01", "watch_dog_01"],
+			"kind": "sponsors",
+			"posts": [
+				{
+					"id": "watch_dog_post_02",
+					"initial_status": "open",
+					"sender": "Puppy Ears",
+					"en": "watch_dog_02/post_02.md",
+					"fr": "watch_dog_02/post_02.md"
+				}
+			]
+		}, {
+			"id": "the_butcher_02",
+			"title": "The Butcher 2",
+			"reward": 100,
+			"initial_status": "locked",
+			"dependencies": ["the_butcher_01", "watch_dog_02"],
+			"kind": "games",
+			"posts": [
+				{
+					"id": "the_butcher_post_02",
+					"initial_status": "open",
+					"sender": "Red Leader",
+					"en": "the_butcher_02/post_02.md",
+					"fr": "the_butcher_02/post_02.md"
+				}
+			]
+		}
+	]
+}
