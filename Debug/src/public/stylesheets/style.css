@@ -1,0 +1,145 @@
+/*
+ *  Copyright 2015 Alexandre Terrasa <alexandre@moz-code.org>.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing perbugs and
+ *  limitations under the License.
+ */
+
+body {
+	margin-top: 100px;
+	margin-bottom: 40px;
+	background-color:#001321;
+	background-image:
+	linear-gradient(rgba(90,190,222,.1) 0px, transparent 1px),
+	linear-gradient(90deg, rgba(90,190,222,.1) 0px, transparent 1px),
+	linear-gradient(rgba(90,190,222,.1) 1px, transparent 1px),
+	linear-gradient(90deg, rgba(90,190,222,.1) 1px, transparent 1px);
+	background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
+	background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+a:hover { text-decoration: none; }
+
+pre { white-space: pre-wrap; }
+
+/* Panels */
+
+.panel-custom {
+	padding: 1em;
+	border-color: rgba(90, 190, 222, 0.2);
+	background-color: rgba(0, 190, 255, 0.2);
+	color: white;
+}
+
+.panel-custom h1, .panel-custom h2, .panel-custom h3,
+.panel-custom h4, .panel-custom h5, .panel-custom h6 {
+	color: rgb(255, 150, 0);
+}
+
+.panel-error {
+	padding: 1em;
+	border-color: rgba(222, 90, 90, 0.2);
+	background-color: rgba(255, 0, 0, 0.2);
+	color: white;
+}
+
+.panel-error h1, .panel-error h2, .panel-error h3,
+.panel-error h4, .panel-error h5, .panel-error h6 {
+	color: rgb(255, 0, 0);
+}
+
+.panel-dome {
+	position: relative;
+}
+
+#panel-canvas {
+	background: transparent;
+	text-align: center;
+}
+
+/* Score table */
+
+dl.dl-short {
+	margin-bottom: 0px;
+}
+
+.dl-short .progress {
+	margin-bottom: 0px;
+}
+
+.dl-short dt {
+	width: 25px;
+	text-align: center;
+}
+
+.dl-short dd {
+	margin-left: 30px;
+}
+
+tr.team:hover { background-color: rgba(245, 245, 245, 0.12); }
+
+tr.team.isdead { background-color: rgba(0, 0, 0, 0.5); }
+tr.team.isdead:hover { background-color: rgba(0, 0, 0, 0.7); }
+tr.team.isdead a {color: #888; }
+
+tr.team.indanger { background-color: rgba(255, 0, 0, 0.4); }
+tr.team.indanger:hover { background-color: rgba(255, 0, 0, 0.6); }
+tr.team.indanger a {color: #ff0000; }
+
+.panel-custom.team.isdead { background-color: rgba(0, 0, 0, 0.5); }
+.panel-custom.team.indanger {
+	background-color: rgba(255, 0, 0, 0.2);
+    animation-name: danger-flash;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes danger-flash {
+    from {background-color: rgba(255, 0, 0, 0.2)}
+    to {background-color: rgba(255, 0, 0, 0.4)}
+}
+
+#canvas-dome {
+	background-image: url("../images/dome.png");
+	background-size: 100% 460px;
+	width: 600px;
+	height: 400px;
+}
+
+.slot-icon {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 50px;
+	height: 50px;
+	background-repeat:  no-repeat;
+	background-size:45px 45px;
+	background-position: center;
+}
+
+#bug_hello { margin-left:-245px; margin-top:70px; background-image: url("/images/speak.png"); }
+#access_panel { margin-left:210px; margin-top:70px; background-image: url("/images/sensors.png"); }
+#thermal_reactor { margin-left:-140px; margin-top:85px; background-image: url('/images/temp.png')}
+#ventilation { margin-left:-20px; margin-top:95px; background-image: url('/images/fan.png')}
+#atomic_engine { margin-left:105px; margin-top:85px; background-image: url('/images/nuclear.png')}
+#shield_gen { margin-left:-20px; margin-top:-135px; background-image: url('/images/shield.png') }
+#alu_sim { margin-left:-235px; margin-top:-10px; background-image: url('/images/panel.png') }
+#power_grid { margin-left:200px; margin-top:-10px; background-image: url('/images/power.png') }
+#doors { margin-left:-125px; margin-top:5px; background-image: url('/images/lock.png') }
+#domesec { margin-left:85px; margin-top:5px; background-image: url('/images/scan.png') }
+#water_supply { margin-left:-20px; margin-top:10px; background-image: url('/images/water.png') }
+#irrigations { margin-left:-180px; margin-top:-85px; background-image: url('/images/pipe.png') }
+#militia_dispatch { margin-left:-80px; margin-top:-70px; background-image: url('/images/militia.png') }
+#alveoli { margin-left:40px; margin-top:-70px; background-image: url('/images/alveoli.png') }
+#domefs { margin-left:140px; margin-top:-85px; background-image: url('/images/domefs.png') }

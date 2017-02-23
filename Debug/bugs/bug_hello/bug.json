@@ -1,0 +1,9 @@
+{
+	"id": "bug_hello",
+	"title": "Bug Hello",
+	"description": "Challenge example, really simple to solve. You should start by this one.",
+	"o2boost": 1,
+	"zboost": 1,
+	"score_bonus": 2,
+	"language": "nit"
+}
