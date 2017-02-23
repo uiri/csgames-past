@@ -1,3 +1,0 @@
-## -- 2
-The most valiant dragon of the pirate sea is ....
-

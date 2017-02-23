@@ -1,4 +1,0 @@
-*.swp
-*.swo
-migrations/
-db.sqlite3

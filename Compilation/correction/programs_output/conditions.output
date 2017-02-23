@@ -1,3 +1,0 @@
- -- FAUX : 1 > 5 --  -- VRAI : 1 < 5 --  -- FAUX : 1 = 5 -- 
- TEST  Variables : a=
-30b=0 -- VRAI :  b = 0 && a = 30 --  -- VRAI :  b = 1 || a = 30 --  -- VRAI :  a > 0 && b < 30 --  -- FAUX :  not (a > 0 && b < 30) -- -- VRAI :  not (a > 0 && b < 30) --  -- FAUX : a > 0 && a = 25 -- 
