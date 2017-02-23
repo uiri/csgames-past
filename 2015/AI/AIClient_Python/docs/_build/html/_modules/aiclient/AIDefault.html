@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>aiclient.AIDefault &mdash; AI Client Python 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="AI Client Python 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for aiclient.AIDefault</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">aiclient.Singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
+<span class="kn">from</span> <span class="nn">world.World</span> <span class="kn">import</span> <span class="n">World</span>
+<span class="kn">from</span> <span class="nn">mathUtils.Vector2</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">from</span> <span class="nn">mathUtils.Direction</span> <span class="kn">import</span> <span class="n">Direction</span>
+
+
+<div class="viewcode-block" id="AIStatus"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIStatus">[docs]</a><span class="k">class</span> <span class="nc">AIStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Enum created for the AI example</span>
+<span class="sd">    (Can be deleted)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">INIT</span><span class="p">,</span> <span class="n">LOWER_RIGHT</span><span class="p">,</span> <span class="n">LOWER_LEFT</span><span class="p">,</span> <span class="n">UPPER_RIGHT</span><span class="p">,</span> <span class="n">UPPER_LEFT</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AIDefault"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault">[docs]</a><span class="k">class</span> <span class="nc">AIDefault</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Represents the AI that need to be implemented</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">world</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">World</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The world singleton needed to get the info on the current state of the world</span>
+<span class="sd">       (see :class:`.World`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The current status of the AI example</span>
+<span class="sd">    (Can be deleted)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">position1</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">position2</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">position3</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">position4</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="AIDefault.tick"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call every 30 ms, this is the starting point for the AI</span>
+<span class="sd">        (Cannot be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initState</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lowerRight</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_LEFT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lowerLeft</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_RIGHT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upperRight</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_LEFT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upperLeft</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="AIDefault.initState"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.initState">[docs]</a>    <span class="k">def</span> <span class="nf">initState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the init state of the AI example</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+        <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+        
+        <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
+        <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
+        
+        <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+        <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span>
+    </div>
+<div class="viewcode-block" id="AIDefault.lowerRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.lowerRight">[docs]</a>    <span class="k">def</span> <span class="nf">lowerRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the lowerRight state of the AI example</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+        <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">character1</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">:</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position1</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position4</span><span class="p">)</span>
+
+            <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_LEFT</span>
+    </div>
+<div class="viewcode-block" id="AIDefault.lowerLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.lowerLeft">[docs]</a>    <span class="k">def</span> <span class="nf">lowerLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the lowerLeft state of the AI example</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+        <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">character1</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">position1</span><span class="p">:</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position4</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position1</span><span class="p">)</span>
+            
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">)</span>
+            
+            <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_RIGHT</span>
+    </div>
+<div class="viewcode-block" id="AIDefault.upperRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.upperRight">[docs]</a>    <span class="k">def</span> <span class="nf">upperRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the upperRight state of the AI example</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+        <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">character1</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">position4</span><span class="p">:</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
+
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
+
+            <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_LEFT</span>
+    </div>
+<div class="viewcode-block" id="AIDefault.upperLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AIDefault.AIDefault.upperLeft">[docs]</a>    <span class="k">def</span> <span class="nf">upperLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the upperLeft state of the AI example</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+        <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">character1</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">:</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
+            
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
+            
+            <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Samuel-Ricardo Carriere.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

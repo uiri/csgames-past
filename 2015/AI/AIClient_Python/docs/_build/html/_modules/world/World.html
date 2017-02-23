@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>world.World &mdash; AI Client Python 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="AI Client Python 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for world.World</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Dec 20, 2014</span>
+
+<span class="sd">@author: scarriere</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">event.AddPlayerEvent</span> <span class="kn">import</span> <span class="n">AddPlayerEvent</span>
+<span class="kn">from</span> <span class="nn">aiclient.Singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
+<span class="kn">from</span> <span class="nn">event.QueueController</span> <span class="kn">import</span> <span class="n">QueueController</span>
+<span class="kn">from</span> <span class="nn">mathUtils.Vector2</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">from</span> <span class="nn">world.Team</span> <span class="kn">import</span> <span class="n">Team</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../world.html#world.World.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An Enum that represent all the entity that can be found in the world</span>
+<span class="sd">        EMPTY, BOX, CHARACTER, MISSILE</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">EMPTY</span><span class="p">,</span> <span class="n">BOX</span><span class="p">,</span> <span class="n">CHARACTER</span><span class="p">,</span> <span class="n">MISSILE</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="World"><a class="viewcode-back" href="../../world.html#world.World.World">[docs]</a><span class="k">class</span> <span class="nc">World</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class that contain all the informations about the Teams, Characters and Missiles</span>
+<span class="sd">        (You can&#39;t use any of the functions or variables that start with an &quot;_&quot;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_instance</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_yourId</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_gameIsStarted</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_gameIsFinished</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="n">teams</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    List of all the teams</span>
+<span class="sd">        (see :class:`.Team`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_joinGame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yourId</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_yourId</span> <span class="o">=</span> <span class="n">yourId</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;JoinGameEvent: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_yourId</span><span class="p">))</span>
+        
+        <span class="n">teamName</span> <span class="o">=</span> <span class="s">&quot;python team (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">yourId</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span>
+        <span class="n">characterNames</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;python king (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">yourId</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="p">,</span> <span class="s">&quot;python soldier (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">yourId</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="p">]</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">AddPlayerEvent</span><span class="p">(</span><span class="n">teamName</span><span class="p">,</span> <span class="n">characterNames</span><span class="p">)</span>
+        <span class="n">queueController</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">QueueController</span><span class="p">)</span>
+        <span class="n">queueController</span><span class="o">.</span><span class="n">outEvents</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_sendGameInfos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapWidth</span><span class="p">,</span> <span class="n">mapHeight</span><span class="p">,</span> <span class="n">numberOfteam</span><span class="p">,</span> <span class="n">numberOfCharacter</span><span class="p">,</span> <span class="n">teamIDs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numberOfteam</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">Team</span><span class="p">(</span><span class="n">teamIDs</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">numberOfCharacter</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gameIsStarted</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">_updateBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_endGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;End game&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gameIsFinished</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="World.getTeam"><a class="viewcode-back" href="../../world.html#world.World.World.getTeam">[docs]</a>    <span class="k">def</span> <span class="nf">getTeam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">teamId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Team</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the team that is associate with the given team Id(:class:`int`)</span>
+<span class="sd">        or None if not found</span>
+<span class="sd">        </span>
+<span class="sd">            Important: the team id are not starting at 0</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+<span class="sd">        </span>
+<span class="sd">            aTeam = world.getTeam(2)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">team</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">team</span><span class="o">.</span><span class="n">_teamId</span> <span class="o">==</span> <span class="n">teamId</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">team</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    </div>
+<div class="viewcode-block" id="World.getMyTeam"><a class="viewcode-back" href="../../world.html#world.World.World.getMyTeam">[docs]</a>    <span class="k">def</span> <span class="nf">getMyTeam</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Team</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the team associate with your id(:class:`int`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            myTeam = world.getMyTeam()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTeam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_yourId</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="World.getOpponentTeam"><a class="viewcode-back" href="../../world.html#world.World.World.getOpponentTeam">[docs]</a>    <span class="k">def</span> <span class="nf">getOpponentTeam</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Team</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the opponent team</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            otherTeam = world.getOpponentTeam()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">team</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">team</span><span class="o">.</span><span class="n">_teamId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yourId</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">team</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="World.isBoxAtPosition"><a class="viewcode-back" href="../../world.html#world.World.World.isBoxAtPosition">[docs]</a>    <span class="k">def</span> <span class="nf">isBoxAtPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if there&#39;s a box at a certain position(:class:`.Vector2`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            checkBox = world.isBoxAtPosition(Vector2(5,5))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+        </div>
+<div class="viewcode-block" id="World.isCharacterAtposition"><a class="viewcode-back" href="../../world.html#world.World.World.isCharacterAtposition">[docs]</a>    <span class="k">def</span> <span class="nf">isCharacterAtposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if there&#39;s a character(:class:`.Character`)</span>
+<span class="sd">        at a certain position(:class:`.Vector2`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            checkCharacter = world.isCharacterAtposition(Vector2(5,5))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">team</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">team</span><span class="o">.</span><span class="n">characters</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">character</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="n">position</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="World.isMissileAtPosition"><a class="viewcode-back" href="../../world.html#world.World.World.isMissileAtPosition">[docs]</a>    <span class="k">def</span> <span class="nf">isMissileAtPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if there&#39;s a missile(:class:`.Missile`)</span>
+<span class="sd">        at a certain position(:class:`.Vector2`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            checkMissile = world.isMissileAtPosition(Vector2(5,5))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">team</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">teams</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">team</span><span class="o">.</span><span class="n">characters</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">character</span><span class="o">.</span><span class="n">missile</span><span class="o">.</span><span class="n">position</span> <span class="o">==</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">character</span><span class="o">.</span><span class="n">missile</span><span class="o">.</span><span class="n">isReady</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    </div>
+<div class="viewcode-block" id="World.whatIsAtPosition"><a class="viewcode-back" href="../../world.html#world.World.World.whatIsAtPosition">[docs]</a>    <span class="k">def</span> <span class="nf">whatIsAtPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Entity</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the Entity(:class:`.Entity`)</span>
+<span class="sd">        at a certain position(:class:`.Vector2`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            entity = world.whatIsAtPosition(Vector2(5,5))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isBoxAtPosition</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Entity</span><span class="o">.</span><span class="n">BOX</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isCharacterAtposition</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Entity</span><span class="o">.</span><span class="n">CHARACTER</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isMissileAtPosition</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Entity</span><span class="o">.</span><span class="n">MISSILE</span>
+        <span class="k">return</span> <span class="n">Entity</span><span class="o">.</span><span class="n">EMPTY</span>
+</div>
+<div class="viewcode-block" id="World.whatIsInTheWay"><a class="viewcode-back" href="../../world.html#world.World.World.whatIsInTheWay">[docs]</a>    <span class="k">def</span> <span class="nf">whatIsInTheWay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Vector2</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Vector2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{}:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return a dict[x,y] = mapEntity between a position and a direction</span>
+<span class="sd">        vector(:class:`.Vector2`)</span>
+<span class="sd">        </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            objects = world.whatIsInTheWay(origin,</span>
+<span class="sd">                            MathUtils.getDirectionVector(origin, toPosition))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">obstacle</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">direction</span><span class="o">.</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obstacle</span>
+        <span class="n">unit_direction</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">length</span><span class="p">,</span> <span class="n">direction</span><span class="o">.</span><span class="n">y</span><span class="o">/</span><span class="n">length</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">unit_direction</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">unit_direction</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Non possible path&quot;</span><span class="p">,</span> <span class="n">unit_direction</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">currentPos</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">origin</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">unit_direction</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="n">origin</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">unit_direction</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">whatIsAtPosition</span><span class="p">(</span><span class="n">currentPos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Entity</span><span class="o">.</span><span class="n">EMPTY</span><span class="p">:</span>
+                <span class="n">obstacle</span><span class="p">[</span><span class="n">currentPos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">currentPos</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="k">return</span> <span class="n">obstacle</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Samuel-Ricardo Carriere.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>world Package &mdash; AI Client Python 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="AI Client Python 1.0.0 documentation" href="index.html" />
+    <link rel="prev" title="mathUtils Package" href="mathUtils.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mathUtils.html" title="mathUtils Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="world-package">
+<h1>world Package<a class="headerlink" href="#world-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-world.World">
+<span id="world-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">World</span></tt> Module<a class="headerlink" href="#module-world.World" title="Permalink to this headline">¶</a></h2>
+<p>Created on Dec 20, 2014</p>
+<p>&#64;author: scarriere</p>
+<div class="section" id="world-class">
+<h3><a class="reference internal" href="#world.World.World" title="world.World.World"><tt class="xref py py-class docutils literal"><span class="pre">World</span></tt></a> Class<a class="headerlink" href="#world-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="world.World.World">
+<em class="property">class </em><tt class="descclassname">world.World.</tt><tt class="descname">World</tt><a class="reference internal" href="_modules/world/World.html#World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="docutils">
+<dt>Class that contain all the informations about the Teams, Characters and Missiles</dt>
+<dd>(You can&#8217;t use any of the functions or variables that start with an &#8220;_&#8221;)</dd>
+</dl>
+<dl class="method">
+<dt id="world.World.World.getMyTeam">
+<tt class="descname">getMyTeam</tt><big>(</big><big>)</big> &rarr; world.Team.Team<a class="reference internal" href="_modules/world/World.html#World.getMyTeam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.getMyTeam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the team associate with your id(<tt class="xref py py-class docutils literal"><span class="pre">int</span></tt>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">myTeam</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.getOpponentTeam">
+<tt class="descname">getOpponentTeam</tt><big>(</big><big>)</big> &rarr; world.Team.Team<a class="reference internal" href="_modules/world/World.html#World.getOpponentTeam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.getOpponentTeam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the opponent team</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">otherTeam</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">getOpponentTeam</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.getTeam">
+<tt class="descname">getTeam</tt><big>(</big><em>teamId</em><big>)</big> &rarr; world.Team.Team<a class="reference internal" href="_modules/world/World.html#World.getTeam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.getTeam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the team that is associate with the given team Id(<tt class="xref py py-class docutils literal"><span class="pre">int</span></tt>)
+or None if not found</p>
+<blockquote>
+<div>Important: the team id are not starting at 0</div></blockquote>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aTeam</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">getTeam</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.isBoxAtPosition">
+<tt class="descname">isBoxAtPosition</tt><big>(</big><em>position</em><big>)</big> &rarr; bool<a class="reference internal" href="_modules/world/World.html#World.isBoxAtPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.isBoxAtPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if there&#8217;s a box at a certain position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">checkBox</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">isBoxAtPosition</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.isCharacterAtposition">
+<tt class="descname">isCharacterAtposition</tt><big>(</big><em>position</em><big>)</big> &rarr; bool<a class="reference internal" href="_modules/world/World.html#World.isCharacterAtposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.isCharacterAtposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if there&#8217;s a character(<a class="reference internal" href="#world.Character.Character" title="world.Character.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a>)
+at a certain position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">checkCharacter</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">isCharacterAtposition</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.isMissileAtPosition">
+<tt class="descname">isMissileAtPosition</tt><big>(</big><em>position</em><big>)</big> &rarr; bool<a class="reference internal" href="_modules/world/World.html#World.isMissileAtPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.isMissileAtPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if there&#8217;s a missile(<a class="reference internal" href="#world.Missile.Missile" title="world.Missile.Missile"><tt class="xref py py-class docutils literal"><span class="pre">Missile</span></tt></a>)
+at a certain position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">checkMissile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">isMissileAtPosition</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.World.World.teams">
+<tt class="descname">teams</tt><em class="property"> = []</em><a class="headerlink" href="#world.World.World.teams" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>List of all the teams</dt>
+<dd>(see <a class="reference internal" href="#world.Team.Team" title="world.Team.Team"><tt class="xref py py-class docutils literal"><span class="pre">Team</span></tt></a>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.whatIsAtPosition">
+<tt class="descname">whatIsAtPosition</tt><big>(</big><em>position</em><big>)</big> &rarr; world.World.Entity<a class="reference internal" href="_modules/world/World.html#World.whatIsAtPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.whatIsAtPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Entity(<a class="reference internal" href="#world.World.Entity" title="world.World.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a>)
+at a certain position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entity</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">whatIsAtPosition</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.World.World.whatIsInTheWay">
+<tt class="descname">whatIsInTheWay</tt><big>(</big><em>origin: mathUtils.Vector2.Vector2</em>, <em>direction: mathUtils.Vector2.Vector2</em><big>)</big> &rarr; {}<a class="reference internal" href="_modules/world/World.html#World.whatIsInTheWay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.World.whatIsInTheWay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict[x,y] = mapEntity between a position and a direction
+vector(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">whatIsInTheWay</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span>
+                <span class="n">MathUtils</span><span class="o">.</span><span class="n">getDirectionVector</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">toPosition</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="entity-class">
+<h3><a class="reference internal" href="#world.World.Entity" title="world.World.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a> Class<a class="headerlink" href="#entity-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="world.World.Entity">
+<em class="property">class </em><tt class="descclassname">world.World.</tt><tt class="descname">Entity</tt><a class="reference internal" href="_modules/world/World.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.World.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></tt></p>
+<dl class="docutils">
+<dt>An Enum that represent all the entity that can be found in the world</dt>
+<dd>EMPTY, BOX, CHARACTER, MISSILE</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-world.Team">
+<span id="team-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">Team</span></tt> Module<a class="headerlink" href="#module-world.Team" title="Permalink to this headline">¶</a></h2>
+<p>Created on Dec 20, 2014</p>
+<p>&#64;author: samuel</p>
+<div class="section" id="team-class">
+<h3><a class="reference internal" href="#world.Team.Team" title="world.Team.Team"><tt class="xref py py-class docutils literal"><span class="pre">Team</span></tt></a> Class<a class="headerlink" href="#team-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="world.Team.Team">
+<em class="property">class </em><tt class="descclassname">world.Team.</tt><tt class="descname">Team</tt><big>(</big><em>teamId</em>, <em>numberOfCharacter</em><big>)</big><a class="reference internal" href="_modules/world/Team.html#Team"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Team.Team" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="docutils">
+<dt>Class that contain all the informations about the Team</dt>
+<dd>(You can&#8217;t use any of the functions or variables that start with an &#8220;_&#8221;)</dd>
+</dl>
+<dl class="attribute">
+<dt id="world.Team.Team.characters">
+<tt class="descname">characters</tt><em class="property"> = None</em><a class="headerlink" href="#world.Team.Team.characters" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>List of all the characters</dt>
+<dd><p class="first">(see <a class="reference internal" href="#world.Character.Character" title="world.Character.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a>)</p>
+<p class="last">Note: The index of the characters start at 0
+and the id of the character is the same as his index</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Team.Team.getFirstCharacter">
+<tt class="descname">getFirstCharacter</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/world/Team.html#Team.getFirstCharacter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Team.Team.getFirstCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first character(<a class="reference internal" href="#world.Character.Character" title="world.Character.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a>) of the team</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aCharacter</span> <span class="o">=</span> <span class="n">aTeam</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Team.Team.getSecondCharacter">
+<tt class="descname">getSecondCharacter</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/world/Team.html#Team.getSecondCharacter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Team.Team.getSecondCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the second character(<a class="reference internal" href="#world.Character.Character" title="world.Character.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a>) of the team</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aCharacter</span> <span class="o">=</span> <span class="n">aTeam</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-world.Character">
+<span id="character-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">Character</span></tt> Module<a class="headerlink" href="#module-world.Character" title="Permalink to this headline">¶</a></h2>
+<p>Created on Dec 20, 2014</p>
+<p>&#64;author: scarriere</p>
+<div class="section" id="character-class">
+<h3><a class="reference internal" href="#world.Character.Character" title="world.Character.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a> Class<a class="headerlink" href="#character-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="world.Character.Character">
+<em class="property">class </em><tt class="descclassname">world.Character.</tt><tt class="descname">Character</tt><big>(</big><em>characterId</em>, <em>position</em><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="docutils">
+<dt>Class that contain all the informations about the Character</dt>
+<dd>(You can&#8217;t use any of the functions or variables that start with an &#8220;_&#8221;)</dd>
+</dl>
+<dl class="method">
+<dt id="world.Character.Character.dropMine">
+<tt class="descname">dropMine</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character.dropMine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character.dropMine" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Send the order to drop a mine on the current position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</dt>
+<dd>if the mine is ready</dd>
+</dl>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aCharacter</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Character.Character.getPosition">
+<tt class="descname">getPosition</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character.getPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character.getPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the position of the character</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">position</span> <span class="o">=</span> <span class="n">aCharacter</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Character.Character.goTo">
+<tt class="descname">goTo</tt><big>(</big><em>position</em><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character.goTo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character.goTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the order to move the character
+to a certain position(<a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aCharacter</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Character.Character.isAlive">
+<tt class="descname">isAlive</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character.isAlive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character.isAlive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the character still have some life point</p>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">checkIfAlive</span> <span class="o">=</span> <span class="n">aCharacter</span><span class="o">.</span><span class="n">isAlive</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Character.Character.life">
+<tt class="descname">life</tt><em class="property"> = None</em><a class="headerlink" href="#world.Character.Character.life" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The life total of the character</dt>
+<dd>(see <tt class="xref py py-class docutils literal"><span class="pre">int</span></tt>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Character.Character.mineReady">
+<tt class="descname">mineReady</tt><em class="property"> = None</em><a class="headerlink" href="#world.Character.Character.mineReady" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Is the mine ready to be use</dt>
+<dd>(see <tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Character.Character.missile">
+<tt class="descname">missile</tt><em class="property"> = None</em><a class="headerlink" href="#world.Character.Character.missile" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The missile of the character</dt>
+<dd>(see <a class="reference internal" href="#world.Missile.Missile" title="world.Missile.Missile"><tt class="xref py py-class docutils literal"><span class="pre">Missile</span></tt></a>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Character.Character.position">
+<tt class="descname">position</tt><em class="property"> = None</em><a class="headerlink" href="#world.Character.Character.position" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The current position of the character</dt>
+<dd>(see <a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Character.Character.shootMissile">
+<tt class="descname">shootMissile</tt><big>(</big><em>direction</em><big>)</big><a class="reference internal" href="_modules/world/Character.html#Character.shootMissile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Character.Character.shootMissile" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Send the order to shoot a missile on a certain direction(<a class="reference internal" href="mathUtils.html#mathUtils.Direction.Direction" title="mathUtils.Direction.Direction"><tt class="xref py py-class docutils literal"><span class="pre">Direction</span></tt></a>)</dt>
+<dd>if the missile is ready</dd>
+</dl>
+<p>Exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">aCharacter</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-world.Missile">
+<span id="missile-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">Missile</span></tt> Module<a class="headerlink" href="#module-world.Missile" title="Permalink to this headline">¶</a></h2>
+<p>Created on Jan 6, 2015</p>
+<p>&#64;author: scarriere</p>
+<div class="section" id="missile-class">
+<h3><a class="reference internal" href="#world.Missile.Missile" title="world.Missile.Missile"><tt class="xref py py-class docutils literal"><span class="pre">Missile</span></tt></a> Class<a class="headerlink" href="#missile-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="world.Missile.Missile">
+<em class="property">class </em><tt class="descclassname">world.Missile.</tt><tt class="descname">Missile</tt><big>(</big><em>position</em><big>)</big><a class="reference internal" href="_modules/world/Missile.html#Missile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Missile.Missile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="docutils">
+<dt>Class that contain all the informations about the Missile</dt>
+<dd>(You can&#8217;t use any of the functions or variables that start with an &#8220;_&#8221;)</dd>
+</dl>
+<dl class="attribute">
+<dt id="world.Missile.Missile.direction">
+<tt class="descname">direction</tt><em class="property"> = None</em><a class="headerlink" href="#world.Missile.Missile.direction" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The current direction of the missile</dt>
+<dd>(see <a class="reference internal" href="mathUtils.html#mathUtils.Direction.Direction" title="mathUtils.Direction.Direction"><tt class="xref py py-class docutils literal"><span class="pre">Direction</span></tt></a>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Missile.Missile.isReady">
+<tt class="descname">isReady</tt><em class="property"> = None</em><a class="headerlink" href="#world.Missile.Missile.isReady" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Is the missile ready to be use</dt>
+<dd>(see <tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt>)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="world.Missile.Missile.position">
+<tt class="descname">position</tt><em class="property"> = None</em><a class="headerlink" href="#world.Missile.Missile.position" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The current position of the missile</dt>
+<dd>(see <a class="reference internal" href="mathUtils.html#mathUtils.Vector2.Vector2" title="mathUtils.Vector2.Vector2"><tt class="xref py py-class docutils literal"><span class="pre">Vector2</span></tt></a>)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">world Package</a><ul>
+<li><a class="reference internal" href="#module-world.World"><tt class="docutils literal"><span class="pre">World</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#world-class"><tt class="docutils literal"><span class="pre">World</span></tt> Class</a></li>
+<li><a class="reference internal" href="#entity-class"><tt class="docutils literal"><span class="pre">Entity</span></tt> Class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-world.Team"><tt class="docutils literal"><span class="pre">Team</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#team-class"><tt class="docutils literal"><span class="pre">Team</span></tt> Class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-world.Character"><tt class="docutils literal"><span class="pre">Character</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#character-class"><tt class="docutils literal"><span class="pre">Character</span></tt> Class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-world.Missile"><tt class="docutils literal"><span class="pre">Missile</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#missile-class"><tt class="docutils literal"><span class="pre">Missile</span></tt> Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mathUtils.html"
+                        title="previous chapter">mathUtils Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/world.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mathUtils.html" title="mathUtils Package"
+             >previous</a> |</li>
+        <li><a href="index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Samuel-Ricardo Carriere.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

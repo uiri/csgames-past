@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>world.Character &mdash; AI Client Python 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="AI Client Python 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for world.Character</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Dec 20, 2014</span>
+
+<span class="sd">@author: scarriere</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">event.DropMineEvent</span> <span class="kn">import</span> <span class="n">DropMineEvent</span>
+<span class="kn">from</span> <span class="nn">aiclient.Singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
+<span class="kn">from</span> <span class="nn">event.QueueController</span> <span class="kn">import</span> <span class="n">QueueController</span>
+<span class="kn">from</span> <span class="nn">world.Missile</span> <span class="kn">import</span> <span class="n">Missile</span>
+<span class="kn">from</span> <span class="nn">mathUtils.Vector2</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">from</span> <span class="nn">event.MoveCharacterEvent</span> <span class="kn">import</span> <span class="n">MoveCharacterEvent</span>
+<span class="kn">from</span> <span class="nn">event.ThrowMissileEvent</span> <span class="kn">import</span> <span class="n">ThrowMissileEvent</span><span class="p">,</span> <span class="n">Direction</span>
+
+
+<div class="viewcode-block" id="Character"><a class="viewcode-back" href="../../world.html#world.Character.Character">[docs]</a><span class="k">class</span> <span class="nc">Character</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class that contain all the informations about the Character</span>
+<span class="sd">        (You can&#39;t use any of the functions or variables that start with an &quot;_&quot;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_queueController</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">QueueController</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">characterId</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_characterId</span> <span class="o">=</span> <span class="n">characterId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The current position of the character</span>
+<span class="sd">            (see :class:`.Vector2`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mineReady</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Is the mine ready to be use</span>
+<span class="sd">            (see :class:`.bool`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missile</span> <span class="o">=</span> <span class="n">Missile</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The missile of the character</span>
+<span class="sd">            (see :class:`.Missile`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">life</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The life total of the character</span>
+<span class="sd">            (see :class:`.int`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">_updatePosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span>
+        
+    <span class="k">def</span> <span class="nf">_hitByMine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">life</span> <span class="o">-=</span> <span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">_mineHit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mineReady</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">_hitByMissile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">life</span> <span class="o">-=</span> <span class="mi">1</span>
+        
+    <span class="k">def</span> <span class="nf">_missileHit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missile</span><span class="o">.</span><span class="n">isReady</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="Character.goTo"><a class="viewcode-back" href="../../world.html#world.Character.Character.goTo">[docs]</a>    <span class="k">def</span> <span class="nf">goTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Send the order to move the character</span>
+<span class="sd">        to a certain position(:class:`.Vector2`)</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+<span class="sd">        </span>
+<span class="sd">            aCharacter.goTo(Vector2(6,7))</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">MoveCharacterEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_characterId</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queueController</span><span class="o">.</span><span class="n">outEvents</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="Character.dropMine"><a class="viewcode-back" href="../../world.html#world.Character.Character.dropMine">[docs]</a>    <span class="k">def</span> <span class="nf">dropMine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Send the order to drop a mine on the current position(:class:`.Vector2`)</span>
+<span class="sd">            if the mine is ready</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+<span class="sd">        </span>
+<span class="sd">            aCharacter.dropMine()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mineReady</span><span class="p">):</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">DropMineEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_characterId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueController</span><span class="o">.</span><span class="n">addOutgoingEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mineReady</span> <span class="o">=</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Character.shootMissile"><a class="viewcode-back" href="../../world.html#world.Character.Character.shootMissile">[docs]</a>    <span class="k">def</span> <span class="nf">shootMissile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Send the order to shoot a missile on a certain direction(:class:`.Direction`)</span>
+<span class="sd">            if the missile is ready</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+<span class="sd">        </span>
+<span class="sd">            aCharacter.shootMissile(Direction.UP)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missile</span><span class="o">.</span><span class="n">isReady</span><span class="p">):</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">ThrowMissileEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_characterId</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queueController</span><span class="o">.</span><span class="n">addOutgoingEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">missile</span><span class="o">.</span><span class="n">isReady</span> <span class="o">=</span> <span class="bp">False</span>
+        </div>
+<div class="viewcode-block" id="Character.isAlive"><a class="viewcode-back" href="../../world.html#world.Character.Character.isAlive">[docs]</a>    <span class="k">def</span> <span class="nf">isAlive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the character still have some life point</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+<span class="sd">        </span>
+<span class="sd">            checkIfAlive = aCharacter.isAlive()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">life</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    </div>
+<div class="viewcode-block" id="Character.getPosition"><a class="viewcode-back" href="../../world.html#world.Character.Character.getPosition">[docs]</a>    <span class="k">def</span> <span class="nf">getPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the position of the character</span>
+<span class="sd">            </span>
+<span class="sd">        Exemple::</span>
+
+<span class="sd">            position = aCharacter.getPosition()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">AI Client Python 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Samuel-Ricardo Carriere.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
