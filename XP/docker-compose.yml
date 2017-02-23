@@ -1,0 +1,23 @@
+dbdata:
+    image: postgres:9.4
+    volumes:
+        - /var/lib/postgresql/data/
+        - /xp_media
+db:
+    image: postgres:9.4
+    environment:
+        - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes_from:
+        - dbdata
+xp:
+    build: .
+    environment:
+        - DB_HOSTNAME=db
+    ports:
+        - "8000:80"
+    volumes:
+        - .:/opt/xp
+    volumes_from:
+        - dbdata
+    links:
+        - db

@@ -1,0 +1,1 @@
+$(".modal").addClass("blink");

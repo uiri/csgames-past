@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'xp.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div id="yoloContainer" class="col-lg-12 well well-lg text-center" style="display:none;">
+    <div id="yoloButton" class="btn btn-xlg btn-danger">Very Intriguing Button</div>
+  </div>
+
+  {% for chal in chals %}
+    <div id="chal-wrapper-{{ chal.id }}" class="chal-wrapper col-md-12" data-id="{{ chal.id }}" data-end="{{ chal.end }}" data-title="{{ chal.title }}" data-length="{{ chal.length }}" data-submitted="false" data-toggle="modal" data-target="#chalModal">
+      <div class="chal-hud col-md-12 col-sm-12">
+        <span class="chal-icon col-md-2 col-sm-2">{{ chal.title_EN|truncatechars:6 }}</span>
+        <span class="chal-progress col-md-8 col-sm-8">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">YOLO \( ^_^ )/</div>
+          </div>
+        </span>
+        <span class="chal-status col-md-1 col-sm-1 text-center"><i class="glyphicon{% if chal in completed %} glyphicon-ok{% elif chal in failed %} glyphicon-remove{% endif %}"></i></span>
+        <span class="chal-time col-md-1 col-sm-1">{{ chal.length }} min</span>
+      </div>
+    </div>
+  {% endfor %}
+
+<div class="modal fade" id="chalModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="chal-problem-wrapper"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endblock %}
+
+{% block footer_scripts %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static 'xp.js' %}"></script>
+  <script type="text/javascript" src="{% static 'jquery.form.min.js' %}"></script>
+{% endblock %}

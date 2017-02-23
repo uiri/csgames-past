@@ -1,0 +1,25 @@
+dev_dbdata:
+    image: postgres:9.4
+    volumes:
+        - /var/lib/postgresql/data/
+        - /opt/xp/src/xtreme_programming/media/submission
+dev_db:
+    image: postgres:9.4
+    environment:
+        - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes_from:
+        - dev_dbdata
+dev_xp:
+    build: .
+    dockerfile: dev.docker
+    environment:
+        - DB_HOSTNAME=dev_db
+        - XP_DEV=true
+    ports:
+        - "8000:8000"
+    volumes:
+        - .:/opt/xp
+    volumes_from:
+        - dev_dbdata
+    links:
+        - dev_db
