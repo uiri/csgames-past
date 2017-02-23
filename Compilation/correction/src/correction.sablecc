@@ -1,0 +1,74 @@
+/* Grammar of a mini procedural programming language */
+Language minilang;
+
+Lexer
+l = 'a'..'z'|'A'..'Z'|'_';
+d = '0'..'9';
+id = l (l|d)*;
+int = d+;
+char = '\'' Any;
+str = '"' (Any - '"')* '"';
+comment = '//' (Any - #10)* #10?;
+blank = ' ' | #10 | #9 | comment;
+
+
+Ignored blank;
+
+Parser
+
+prog = s prog | s;
+
+s = closes | opens;
+
+closes =	{assign:} id '=' e |
+		{print:} 'print' e |
+		{print_byte:} 'print' 'byte' e |
+		{print_str:} 'print' str |
+		{println:} 'println' |
+		{stmts:} '(' stmts ')' |
+		{ifelse:} 'if' c closes 'else' closes |
+		{while:} 'while' c closes;
+
+opens = 	{while:} 'while' c opens |
+		{if:} 'if' c s |
+		{ifelse:} 'if' c closes 'else' opens;
+
+
+stmts = s | s stmts;
+
+else = 'else' s;
+
+e = 
+	{neg:} '-' em;
+
+em = 
+	{mul:} e '*' em |
+	{div:} e '/' em |
+	ea;
+
+ea = 
+	{add:} e '+' ea |
+	{sub:} e '-' ea |
+	{lit:} int |
+	{cha:} char |
+	{par:} '(' e ')' |
+	{var:} id |
+	{read:} 'read' |
+	{read_byte:} 'read' 'byte';
+
+c =
+	{not:} 'not' c |
+	{cp:} [left:]e [rights:]cps |
+	{par:} '(' c ')' |
+	{and:} [left:]e '&&' [right:]c |
+	{or:} [left:]e '||' [right:]c;
+
+cps = cp | cp cps;
+
+cp =
+	{eq:} '=' [right:]e |
+	{ne:} '!=' [right:]e |
+	{lt:} '<' [right:]e |
+	{le:} '<=' [right:]e |
+	{gt:} '>' [right:]e |
+	{ge:} '>=' [right:]e ;

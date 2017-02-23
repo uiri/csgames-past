@@ -1,0 +1,25 @@
+/* Grammar of Mpire. eMpirical Procedural Idiom for Robust Execution */
+Language mpire;
+
+Lexer
+
+d = '0'..'9';
+int = d+;
+str = '"' (Any - '"')* '"';
+comment = '//' (Any - #10)* #10?;
+blank = ' ' | #10 | #9 | comment;
+
+Ignored blank;
+
+Parser
+
+prog = prog stmt | stmt;
+
+stmt = 
+	{print:} 'print' expr |
+	{printstr:} 'print' str |
+	{stmts:} '(' prog ')' ;
+
+expr = 
+	{int:} int ;
+

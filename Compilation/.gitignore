@@ -1,0 +1,8 @@
+bin/*
+out/*
+
+*.out
+*.dot
+
+*.sw[op]
+*.class
